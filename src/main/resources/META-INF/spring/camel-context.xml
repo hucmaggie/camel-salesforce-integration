@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:salesforceconfig.properties</value>
+		</property>
+	</bean>
+	<bean id="salesforce"
+		class="org.apache.camel.component.salesforce.SalesforceComponent">
+
+		<property name="loginConfig">
+			<bean class="org.apache.camel.component.salesforce.SalesforceLoginConfig">
+				<property name="loginUrl" value="${loginUrl}"></property>
+				<property name="userName" value="${userName}"></property>
+				<property name="password" value="${password}"></property>
+				<property name="clientId" value="${clientId}"></property>
+				<property name="clientSecret" value="${clientSecret}"></property>
+			</bean>
+		</property>
+		<property name="config">
+			<bean
+				class="org.apache.camel.component.salesforce.SalesforceEndpointConfig">
+				<property name="sObjectName" value="${sObjectName}"></property>
+				<property name="sObjectClass" value="${sObjectClass}"></property>
+			</bean>
+		</property>
+		<property name="packages" value="${sObjectDTOPackages}"></property>
+	</bean>
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route id="sfRoute">
+        <from uri="timer://foo?repeatCount=1"/>
+        <to uri="salesforce:getSObjectWithId?sObjectName=Account&amp;sObjectIdName=JBoss_Fuse_Integration_External_ID__c&amp;sObjectIdValue=12345"/>
+        <convertBodyTo type="java.lang.String"/>
+        <log message="Query result back from Salesforce: ${body}"/>
+    </route>
+</camelContext>
+
+</beans>
