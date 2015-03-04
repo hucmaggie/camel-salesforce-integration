@@ -5,7 +5,7 @@ This is a simple demo, to test login, query, and upsert into an Account Object i
 Setup and configuration
 -----------------------
 
-Goto project folder, under src/main/fabric8, find the salesforcedemo.properties file, 
+Goto project folder, under src/main/resources, find the salesforcedemo.properties file, 
 Replace loginConfig parameters with your own from Salesforce Deverloper org.
 (See my blog for more detail: http://maggiechu-jboss.blogspot.com/2015/02/jboss-fuse-connecting-to-salesforce.html)
  
